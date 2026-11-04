@@ -61,23 +61,27 @@ button { font: inherit; color: inherit; }
 .sl:hover::after { opacity: .08; } .sl:active::after { opacity: .12; }
 :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
 /* app bar */
-.appbar { position: sticky; top: 0; z-index: 20; background: var(--surface); display: flex; align-items: center; gap: 4px;
-  min-height: 64px; padding: env(safe-area-inset-top, 0px) max(8px, env(safe-area-inset-right, 0px)) 0 max(8px, env(safe-area-inset-left, 0px)); transition: background .2s; }
+:root { --content-w: 1200px; }
+.appbar { position: sticky; top: 0; z-index: 20; background: var(--surface); transition: background .2s;
+  padding: env(safe-area-inset-top, 0px) max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
+.appbar-in { max-width: var(--content-w); margin: 0 auto; min-height: 64px; display: flex; align-items: center; gap: 4px; }
+.appbar-in .icon-btn:last-child { margin-right: -8px; }
 .appbar.scrolled { background: var(--surface-c); }
-.appbar .logo { width: 40px; height: 40px; display: grid; place-items: center; color: var(--primary); margin-left: 4px; }
-.appbar h1 { margin: 0 0 0 4px; flex: 1; min-width: 0; font-size: 22px; line-height: 28px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.appbar .logo { width: 24px; height: 40px; display: grid; place-items: center; color: var(--primary); }
+.appbar h1 { margin: 0 0 0 12px; flex: 1; min-width: 0; font-size: 22px; line-height: 28px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 0; background: none; display: grid; place-items: center; cursor: pointer; color: var(--on-surface-var); }
 .icon-btn:disabled { opacity: .38; cursor: default; }
 /* stepper */
-.stepper { display: flex; align-items: center; gap: 8px; padding: 4px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)); overflow-x: auto; }
+.stepper { padding: 4px max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
+.stepper-in { max-width: var(--content-w); margin: 0 auto; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 4px 0; }
 .step { display: flex; align-items: center; gap: 8px; color: var(--on-surface-var); white-space: nowrap; }
 .step .dot { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font: 500 12px/1 var(--font); border: 1px solid var(--outline); }
 .step.active { color: var(--on-surface); } .step.active .dot { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
 .step.done .dot { background: var(--primary-container); color: var(--on-primary-container); border-color: transparent; }
 .step-line { flex: 1 1 24px; min-width: 16px; max-width: 80px; height: 1px; background: var(--outline-var); }
 /* layout */
-main { padding: 0 max(16px, env(safe-area-inset-right, 0px)) 112px max(16px, env(safe-area-inset-left, 0px)); }
-.panes { display: grid; grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); gap: 16px; align-items: start; max-width: 1240px; margin: 0 auto; }
+main { padding: 32px max(16px, env(safe-area-inset-right, 0px)) 112px max(16px, env(safe-area-inset-left, 0px)); }
+.panes { display: grid; grid-template-columns: minmax(280px, 360px) minmax(0, 1fr); gap: 16px; align-items: start; max-width: var(--content-w); margin: 0 auto; }
 @media (max-width: 899px) {
   .panes { grid-template-columns: minmax(0, 1fr); }
   .panes.show-detail .list-pane { display: none; }
@@ -85,7 +89,7 @@ main { padding: 0 max(16px, env(safe-area-inset-right, 0px)) 112px max(16px, env
 }
 @media (min-width: 900px) { .back-btn { display: none !important; } }
 .pane { background: var(--surface-c-low); border-radius: var(--shape-l); min-width: 0; }
-.list-pane { position: sticky; top: 76px; padding: 8px 0; max-height: calc(100vh - 140px); overflow: auto; }
+.list-pane { position: sticky; top: 88px; padding: 8px 0; max-height: calc(100vh - 140px); overflow: auto; }
 .list-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px 8px 20px; gap: 8px; }
 /* buttons */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 24px; border-radius: 20px; border: 0; cursor: pointer; font: 500 14px/20px var(--font); letter-spacing: .1px; white-space: nowrap; }
@@ -173,14 +177,11 @@ details.exp[open] > summary .chev { transform: rotate(180deg); }
 .banner.info { background: var(--surface-c-high); }
 .banner .bt { display: grid; gap: 4px; min-width: 0; }
 /* empty / drop */
-.empty { max-width: 760px; margin: 8px auto 0; display: grid; gap: 16px; }
+.empty { max-width: var(--content-w); margin: 0 auto; display: grid; gap: 16px; }
 .drop { border: 2px dashed var(--outline); border-radius: var(--shape-xl); background: var(--surface-c-low); padding: 40px 24px; display: grid; justify-items: center; gap: 12px; text-align: center; cursor: pointer; transition: background .15s, border-color .15s; }
 .drop:hover { background: var(--surface-c); }
 .drop .big { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: var(--primary-container); color: var(--on-primary-container); }
 .drop .big .ms { font-size: 36px; }
-.how { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.how .card-pad { gap: 8px; align-content: start; }
-.how .ic { width: 40px; height: 40px; border-radius: var(--shape-m); display: grid; place-items: center; background: var(--secondary-container); color: var(--on-secondary-container); }
 .dragover-veil { position: fixed; inset: 0; z-index: 60; background: color-mix(in srgb, var(--primary) 14%, transparent); border: 3px dashed var(--primary); display: none; place-items: center; pointer-events: none; }
 .dragover-veil.on { display: grid; }
 .dragover-veil div { background: var(--primary); color: var(--on-primary); padding: 12px 24px; border-radius: 24px; font: 500 16px/24px var(--font); display: flex; gap: 8px; align-items: center; }
@@ -201,13 +202,13 @@ dialog .dlg-actions { display: flex; justify-content: flex-end; }
 </style>
 </head>
 <body>
-<header class="appbar" id="appbar">
+<header class="appbar" id="appbar"><div class="appbar-in">
   <span class="logo"><span class="ms fill">description</span></span>
   <h1>시험지 HWP 변환기</h1>
   <button class="icon-btn sl" id="addTop" type="button" title="PDF 추가" aria-label="PDF 추가"><span class="ms">note_add</span></button>
   <button class="icon-btn sl" id="helpBtn" type="button" title="도움말" aria-label="도움말"><span class="ms">help</span></button>
-</header>
-<nav class="stepper" id="stepper" aria-label="진행 단계"></nav>
+</div></header>
+<nav class="stepper" aria-label="진행 단계"><div class="stepper-in" id="stepper"></div></nav>
 
 <main>
   <section class="empty" id="empty">
@@ -217,11 +218,6 @@ dialog .dlg-actions { display: flex; justify-content: flex-end; }
       <span class="muted">또는 눌러서 파일 고르기 · 여러 개 가능</span>
       <span class="btn filled" aria-hidden="true"><span class="ms">add</span>PDF 선택</span>
     </label>
-    <div class="how">
-      <div class="card"><div class="card-pad"><span class="ic"><span class="ms">auto_awesome</span></span><span class="t-title-s">자동으로 변환</span><span class="muted">넣는 즉시 문항·&lt;보기&gt;·지문·표·그림을 인식해 4-1 서식 HWP로 만듭니다.</span></div></div>
-      <div class="card"><div class="card-pad"><span class="ic"><span class="ms">spellcheck</span></span><span class="t-title-s">띄어쓰기만 확인</span><span class="muted">밑줄 친 글이 줄 끝에서 넘어가는 곳만 골라 달라고 묻습니다. PDF 조각을 보고 하나씩 고르면 됩니다.</span></div></div>
-      <div class="card"><div class="card-pad"><span class="ic"><span class="ms">verified</span></span><span class="t-title-s">PDF와 대조 후 저장</span><span class="muted">HWP 글자를 PDF와 한 글자씩 대조합니다. 파일마다 HWP로, 또는 한 번에 ZIP으로 받습니다.</span></div></div>
-    </div>
     <p class="t-body-s muted" style="text-align:center;margin:0">파일은 이 브라우저 안에서만 처리되고 어디에도 올라가지 않습니다.</p>
   </section>
 
