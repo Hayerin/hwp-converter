@@ -1430,6 +1430,8 @@ const files = [];       // {id, name, bytes, A, joinItems, decisions, confirmed:
 let seq = 0, selected = null, mobileDetail = false;
 const tick = () => new Promise(r => setTimeout(r, 20));
 const base = n => n.replace(/\.pdf$/i, '');
+// 저장 파일명: 끝의 " [Q]"·"_unlocked"를 떼고 "_변환됨"을 붙임
+const outName = n => base(n).replace(/_unlocked$/i, '').replace(/\s*\[Q\]$/i, '').trim() + '_변환됨.hwp';
 
 // ---------------- snackbar
 let snackTimer = null;
@@ -1643,7 +1645,7 @@ function renderDetail() {
   const kb = F.result ? Math.round(F.result.bytes.length / 1024) : null;
   parts.push(el('div', { class: 'section actions-row' },
     el('button', { class: 'btn filled sl', type: 'button', onclick: () => saveOne(F) }, icon('download'), 'HWP 저장'),
-    kb !== null ? el('span', { class: 't-body-s muted' }, `${base(F.name)}.hwp · 약 ${kb.toLocaleString()} KB`) : null));
+    kb !== null ? el('span', { class: 't-body-s muted' }, `${outName(F.name)} · 약 ${kb.toLocaleString()} KB`) : null));
   if (crit.length) parts.push(el('div', { class: 'section' }, el('h3', { class: 'sec-title' }, icon('priority_high'), '꼭 확인할 것', el('span', { class: 'count' }, crit.length)), el('div', { class: 'card' }, reviewRows(F, crit, true))));
   const jc = joinCard(F); if (jc) parts.push(jc);
   const info = A.review.filter(r => r.kind !== 'ULJOIN' && !(KIND[r.kind] && KIND[r.kind][1] === 'crit'));
@@ -1682,7 +1684,7 @@ function saveBytes(name, bytes, type) {
 function saveOne(F) {
   ensureBuilt(F); render();
   if (!F.result) { snack('이 파일은 저장할 수 없습니다'); return; }
-  saveBytes(base(F.name) + '.hwp', F.result.bytes, 'application/x-hwp');
+  saveBytes(outName(F.name), F.result.bytes, 'application/x-hwp');
   snack(todoCount(F) ? `저장했습니다 · 확인 안 한 띄어쓰기 ${todoCount(F)}곳은 붙여 썼습니다` : 'HWP를 저장했습니다');
 }
 $('fab').addEventListener('click', async () => {
@@ -1690,7 +1692,7 @@ $('fab').addEventListener('click', async () => {
   for (const F of ready) if (F.dirty || !F.result) { await tick(); ensureBuilt(F); }
   render();
   const ok = ready.filter(F => F.result);
-  const zip = HwpConv.makeZip(ok.map(F => ({ name: base(F.name) + '.hwp', data: F.result.bytes })));
+  const zip = HwpConv.makeZip(ok.map(F => ({ name: outName(F.name), data: F.result.bytes })));
   const d = new Date(); const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
   saveBytes(`HWP_변환_${ymd}.zip`, zip, 'application/zip');
   const todo = ok.reduce((n, F) => n + todoCount(F), 0);
